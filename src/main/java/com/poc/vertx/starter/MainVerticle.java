@@ -3,18 +3,35 @@ package com.poc.vertx.starter;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.VerticleBase;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 
 public class MainVerticle extends VerticleBase {
- 
+
+  private final UserService userService = new UserService();
+
   @Override
   public Future<?> start() {
     // Create a Router
     Router router = Router.router(vertx);
- 
-    // Mount the handler for all incoming requests at every path and HTTP method
-    router.route().handler(context -> {
+
+    router.route(HttpMethod.POST, "/user/create").handler(context -> {
+      JsonObject body = context.body().asJsonObject();
+      
+      try {
+        UserModel user = userService.createUser(
+          body.getString("name"), 
+          body.getString("email")
+        );
+        context.response().setStatusCode(201);
+        context.json(user);
+      } catch (IllegalArgumentException e) {
+        context.response().setStatusCode(400).end(new JsonObject().put("error", e.getMessage()).encode());
+      }
+    });
+
+    router.route("/health").handler(context -> {
       // Get the address of the request
       String address = context.request().connection().remoteAddress().toString();
       // Get the query parameter "name"
@@ -23,12 +40,12 @@ public class MainVerticle extends VerticleBase {
       // Write a json response
       context.json(
         new JsonObject()
-          .put("name", name)
+          .put("status", name)
           .put("address", address)
           .put("message", "Hello " + name + " connected from " + address)
       );
     });
- 
+
     // Create the HTTP server
     return vertx.createHttpServer()
       // Handle every request using the router
