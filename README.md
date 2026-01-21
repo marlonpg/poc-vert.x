@@ -1,5 +1,7 @@
 # Vert.x POC
 
+Reference: https://www.baeldung.com/vertx
+
 ## What is Vert.x?
 
 Vert.x is a reactive toolkit for building high-performance, scalable applications on the JVM. It's event-driven, non-blocking, and polyglot (supports multiple languages).

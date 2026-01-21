@@ -15,5 +15,6 @@ public class MainVerticle {
         
         // Deploy RestfulWebServiceVerticle
         vertx.deployVerticle(new RestfulWebServiceVerticle());
+
     }
 }
