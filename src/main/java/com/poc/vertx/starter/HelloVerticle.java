@@ -1,7 +1,8 @@
 package com.poc.vertx.starter;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Future;
+import io.vertx.core.Promise;
+
 import java.util.logging.Logger;
 
 public class HelloVerticle extends AbstractVerticle {
@@ -9,9 +10,9 @@ public class HelloVerticle extends AbstractVerticle {
     private static final Logger LOGGER = Logger.getLogger(HelloVerticle.class.getName());
 
     @Override
-    public void start(Future<Void> future) {
+    public void start(Promise<Void> promise) {
         LOGGER.info("Welcome to Vertx");
-        future.complete();
+        promise.complete();
     }
     
     @Override
